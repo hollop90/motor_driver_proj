@@ -530,6 +530,7 @@ void SystemClock_Config(void)
 // Callback: timer has rolled over
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
   // Check which version of the timer triggered this callback and toggle LED
   if (htim == &htim2)
   {
@@ -550,19 +551,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       if (pwm_on)
       {
         HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+        HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
       }
       else
       {
         HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-      }
-
-      if (pwmn_on)
-      {
-    	  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-      }
-      else
-      {
-    	  HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
+        HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
       }
     }
     TIM1->CCR1 = sine_vals[sine1_idx];
@@ -578,19 +572,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       if (pwm_on2)
       {
         HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+        HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
       }
       else
       {
         HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
-      }
-
-      if (pwmn_on2)
-      {
-    	  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-      }
-      else
-      {
-    	  HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
+        HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
       }
     }
     TIM1->CCR2 = sine_vals[sine2_idx];
@@ -606,23 +593,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       if (pwm_on3)
       {
         HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+        HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
       }
       else
       {
         HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
-      }
-
-      if (pwmn_on3)
-      {
-    	  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
-      }
-      else
-      {
-    	  HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
+        HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
       }
     }
     TIM1->CCR3 = sine_vals[sine3_idx];
   }
+  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
 }
 /* USER CODE END 4 */
 
