@@ -133,20 +133,21 @@ int main(void)
 
   while (1)
   {
-	  HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, 1000);
-	  adc_raw = HAL_ADC_GetValue(&hadc1);
-	  tim_val = uu_map(adc_raw, 0, 4095, 200, 2000);
-	  TIM2->ARR = tim_val;
-	  TIM2->EGR |= 1 <<(TIM_EGR_UG_Pos);
-
-	  sprintf(buff, "adc: %d\r\n", adc_raw);
-	  HAL_UART_Transmit(&huart2, buff, sizeof(buff), 1000);
-
-	  sprintf(buff, "map: %d\r\n\n", tim_val);
-	  HAL_UART_Transmit(&huart2, buff, sizeof(buff), 1000);
-
-	  HAL_Delay(100);
+// VARIABLE FREQUENCY CODE
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion(&hadc1, 1000);
+//	  adc_raw = HAL_ADC_GetValue(&hadc1);
+//	  tim_val = uu_map(adc_raw, 0, 4095, 200, 2000);
+//	  TIM2->ARR = tim_val;
+//	  TIM2->EGR |= 1 <<(TIM_EGR_UG_Pos);
+//
+//	  sprintf(buff, "adc: %d\r\n", adc_raw);
+//	  HAL_UART_Transmit(&huart2, buff, sizeof(buff), 1000);
+//
+//	  sprintf(buff, "map: %d\r\n\n", tim_val);
+//	  HAL_UART_Transmit(&huart2, buff, sizeof(buff), 1000);
+//
+//	  HAL_Delay(100);
 
     /* USER CODE END WHILE */
 
