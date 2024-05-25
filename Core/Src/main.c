@@ -79,6 +79,27 @@ void SystemClock_Config(void);
 long adc_raw;
 long tim_val;
 char buff[50] = {};
+
+#define ADC_MAX 4095.0f
+
+float temp(float adc_val){
+    float R_NTC;
+    float R_1 = 1000.0f;
+    float volts = (adc_val/ADC_MAX) * 3.3f;
+    //printf("volts: %f\n", volts);
+
+    R_NTC = (volts*R_1) / (3.3f - volts);
+    //printf("Rntc: %f\n", R_NTC);
+
+    float steinhart = R_NTC/4700.0f;
+    float temperature = log(steinhart);
+    temperature /= 3950.0f;
+    temperature += 1.0 / (273.15f + 25.0f);
+    temperature = 1.0f / temperature;
+    temperature -= 273.15;
+    return temperature;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -133,6 +154,15 @@ int main(void)
 
   while (1)
   {
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 1000);
+	  adc_raw = HAL_ADC_GetValue(&hadc1);
+	  //uint16_t temp_raw = (int)(100 * temp(adc_raw));
+	  float temp_raw = temp(adc_raw);
+	  //sprintf(buff, "temp: %d\r\n %d\r\n", temp_raw, adc_raw);
+	  sprintf(buff, "temp: %f\r\n %d\r\n", temp_raw, adc_raw);
+	  HAL_UART_Transmit(&huart2, buff, sizeof(buff), 1000);
+	  HAL_Delay(100);
 // VARIABLE FREQUENCY CODE
 //	  HAL_ADC_Start(&hadc1);
 //	  HAL_ADC_PollForConversion(&hadc1, 1000);
